@@ -1,0 +1,23 @@
+Qwen3.8-Flash-Next-DGX-Spark-TP1-TP3
+Copyright 2026 BHCC2025. Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This repository redistributes, with the modifications noted in each PROVENANCE.md:
+
+1. patches/ple-offload/ — from tonyd2wild/Qwen3.8-Flash-Next-NVFP4-DGX-Spark at commit
+   6ad1c8f15cbab1ababd2048e8e5f94094dbfc4a0 (single-spark-vllm-tp1/patch/),
+   Copyright 2026 Tony DeAngelo (Tech2Wild / 2Wild), Apache-2.0.
+   recipes/tp1.sh and recipes/tp2.sh are derived from that repository's launch/qwen38fn-nvidia-tp1.sh and
+   launch/qwen38fn-nvidia-tp2.sh (settings unchanged; paths, network and naming moved to cluster.env).
+   One line of patches/ple-offload/upstream-overlays/modelopt.py was changed here (see PROVENANCE.md there).
+
+2. Files from vLLM (https://github.com/vllm-project/vllm), Copyright contributors to the vLLM project, Apache-2.0,
+   base commit 8a728663c1c3eeace834a95f5654fa653cc1998c:
+   patches/ple-offload/*.py and upstream-overlays/*.py (including upstream vLLM PR #55375 by peakcrosser7 and
+   PR #54846 by andreasgru, as documented in upstream-overlays/PROVENANCE.md), and
+   patches/tp3-pad/model.py and mtp.py (with the hooks shown in the .diff files beside them).
+
+The NCCL settings used for the three-node RoCE triangle (recipes/tp3.sh) follow the configuration published in
+MiaAI-Lab/DeepSeek-v4.1-Flash-DGX-Sparks. No code from that repository is included.
+
+Original to this repository: patches/tp3-pad/tp_pad.py, patches/tp3-pad/test_tp_pad.py, the hooks in
+patches/tp3-pad/{model,mtp}.py, recipes/tp3.sh, run.sh, lib/, scripts/, bench/, docs/.

@@ -1,0 +1,24 @@
+=== TP3 padded 2026-09-24T10:40:25-05:00
+--- short code
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=0 runs=3 max_tokens=512 no_think=False code=True
+run1: prompt=53 gen=512 ttft=0.69s prefill=77 tok/s decode=54.2 tok/s total=10.1s
+run2: prompt=53 gen=512 ttft=0.17s prefill=304 tok/s decode=56.5 tok/s total=9.2s
+run3: prompt=53 gen=512 ttft=0.10s prefill=537 tok/s decode=61.7 tok/s total=8.4s
+MEDIAN decode=56.5 tok/s  prefill=304 tok/s
+--- short prose
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=0 runs=3 max_tokens=512 no_think=False code=False
+run1: prompt=29 gen=512 ttft=0.13s prefill=224 tok/s decode=39.3 tok/s total=13.2s
+run2: prompt=29 gen=512 ttft=0.13s prefill=219 tok/s decode=39.4 tok/s total=13.1s
+run3: prompt=29 gen=512 ttft=0.14s prefill=209 tok/s decode=38.3 tok/s total=13.5s
+MEDIAN decode=39.3 tok/s  prefill=219 tok/s
+--- long 12K
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=12 runs=2 max_tokens=512 no_think=False code=False
+run1: prompt=9297 gen=75 ttft=4.40s prefill=2111 tok/s decode=44.3 tok/s total=6.1s
+run2: prompt=9297 gen=53 ttft=3.57s prefill=2602 tok/s decode=59.8 tok/s total=4.5s
+MEDIAN decode=52.0 tok/s  prefill=2356 tok/s
+--- cold prefill 8K
+cold prefill: qwen3.8-flash-next @ http://127.0.0.1:8000/v1  target ~8K tokens, 3 runs, unique prompt each time
+  run1: prompt=7341 ttft=2.79s prefill=2632 tok/s total=2.87s
+  run2: prompt=7315 ttft=2.74s prefill=2669 tok/s total=2.83s
+  run3: prompt=7318 ttft=2.74s prefill=2670 tok/s total=2.84s
+MEDIAN cold prefill = 2669 tok/s

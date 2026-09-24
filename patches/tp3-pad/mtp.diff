@@ -1,0 +1,36 @@
+--- a/mtp.py
++++ b/mtp.py
+@@ -201,6 +201,7 @@
+                 return_bias=False,
+                 quant_config=draft_vllm_config.quant_config,
+                 prefix=f"{prefix}.fc_embedding",
++                disable_tp=_tp_pad_enabled(),  # 2560 out does not divide by TP=3
+             )
+             self.fc_hidden = ColumnParallelLinear(
+                 self.hidden_size,
+@@ -210,6 +211,7 @@
+                 return_bias=False,
+                 quant_config=draft_vllm_config.quant_config,
+                 prefix=f"{prefix}.fc_hidden",
++                disable_tp=_tp_pad_enabled(),
+             )
+             self.layers = nn.ModuleList(
+                 Qwen4ExpDecoderLayer(
+@@ -503,6 +505,8 @@
+         return full
+ 
+     def load_weights(self, weights: Iterable[tuple[str, torch.Tensor]]) -> set[str]:
++        from .tp_pad import transform as _tp_pad  # TP3 padding (qwen38fn-tp3 overlay)
++        weights = _tp_pad(weights)
+         def remap_weight_names():
+             for name, weight in weights:
+                 remapped_name = _remap_mtp_weight_name(name)
+@@ -520,3 +524,8 @@
+ 
+ 
+ __all__ = ["Qwen4ExpMTP", "Qwen4ExpMultiTokenPredictor"]
++
++
++def _tp_pad_enabled() -> bool:
++    from .tp_pad import enabled
++    return enabled()

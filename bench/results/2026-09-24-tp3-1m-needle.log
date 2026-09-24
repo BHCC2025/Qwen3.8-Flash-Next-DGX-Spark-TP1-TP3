@@ -1,0 +1,25 @@
+ctx= 128,278 tok  ttft=   56.4s  prefill=   2275 tok/s  decode= 85.4 tok/s  needles=3/3  gen=39
+    vault-A @  25%  OK    expected citadel-onyx-2721
+    vault-B @  50%  OK    expected glacier-meadow-5812
+    vault-C @  75%  OK    expected sable-yarrow-8420
+    answer: vault-A: citadel-onyx-2721 | vault-B: glacier-meadow-5812 | vault-C: sable-yarrow-8420
+ctx= 256,580 tok  ttft=  115.8s  prefill=   2216 tok/s  decode= 82.6 tok/s  needles=3/3  gen=37
+    vault-A @  25%  OK    expected topaz-river-2722
+    vault-B @  50%  OK    expected quartz-thistle-3852
+    vault-C @  75%  OK    expected violet-lagoon-9585
+    answer: vault-A: topaz-river-2722 | vault-B: quartz-thistle-3852 | vault-C: violet-lagoon-9585
+ctx= 512,460 tok  ttft=  248.6s  prefill=   2061 tok/s  decode=114.4 tok/s  needles=3/3  gen=36
+    vault-A @  25%  OK    expected violet-marble-9755
+    vault-B @  50%  OK    expected glacier-sierra-1193
+    vault-C @  75%  OK    expected timber-prairie-6092
+    answer: vault-A: violet-marble-9755 | vault-B: glacier-sierra-1193 | vault-C: timber-prairie-6092
+ctx= 899,097 tok  ttft=  459.2s  prefill=   1958 tok/s  decode=102.9 tok/s  needles=3/3  gen=37
+    vault-A @  25%  OK    expected lantern-tundra-5427
+    vault-B @  50%  OK    expected cobalt-umber-2676
+    vault-C @  75%  OK    expected marble-prairie-3106
+    answer: vault-A: lantern-tundra-5427 | vault-B: cobalt-umber-2676 | vault-C: marble-prairie-3106
+ctx= 988,274 tok  ttft=  521.8s  prefill=   1894 tok/s  decode=104.5 tok/s  needles=3/3  gen=39
+    vault-A @  25%  OK    expected ivory-maple-6250
+    vault-B @  50%  OK    expected opal-reef-4642
+    vault-C @  75%  OK    expected onyx-copper-3396
+    answer: vault-A: ivory-maple-6250 | vault-B: opal-reef-4642 | vault-C: onyx-copper-3396

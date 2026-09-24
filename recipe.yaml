@@ -1,0 +1,62 @@
+# recipe.yaml — machine-readable summary. Same schema in every BHCC2025 DGX Spark recipe repo.
+schema: 1
+name: Qwen3.8-Flash-Next-DGX-Spark-TP1-TP3
+model:
+  hf_repo: nvidia/Qwen3.8-Flash-Next-NVFP4
+  revision: fc694b54fb0174e0913e6adf86691ef85a4ead47
+  size_on_disk_gb: 124
+  quantization: NVFP4 (ModelOpt)
+engine:
+  name: vllm
+  image: vllm/vllm-openai:nightly-8a728663c1c3eeace834a95f5654fa653cc1998c
+  image_digest: sha256:f5df5cc3302b5f404848c4eca88d7bf7ed5226e151c056da22816d7734644d67
+hardware: NVIDIA DGX Spark (GB10, 128 GB unified memory)
+api: {port: 8000, served_model_name: qwen3.8-flash-next, openai_compatible: true}
+
+setup:                       # read by kit/setup.sh
+  model_dir: /var/tmp/models/Qwen3.8-Flash-Next-NVFP4
+  disk_gb: 130
+  tp_sizes: [1, 2, 3]
+  prepare:
+    3: [scripts/prep-tp3-modeldir.sh, scripts/prep-tp3-modeldir.sh --longctx]
+  first_run: {1: ./run.sh tp1, 2: ./run.sh tp2, 3: ./run.sh tp3}
+  smoke_test: scripts/smoke-test.sh
+
+# verified: true only after bench/bench.sh ran on our own Sparks with this repo's launcher.
+recipes:
+  - id: tp1
+    nodes: 1
+    command: ./run.sh tp1
+    max_model_len: 262144
+    decode_tok_s: {code: 40.1, prose: 26.4, source: bench/results/2026-09-24-tp1-tp2.md}
+    prefill_cold_8k_tok_s: 1779
+    verified: true
+    verified_date: 2026-09-24
+  - id: tp2
+    nodes: 2
+    cabling: one QSFP cable
+    command: ./run.sh tp2
+    max_model_len: 262144
+    decode_tok_s: {code: 51.7, prose: 37.6, source: bench/results/2026-09-24-tp1-tp2.md}
+    prefill_cold_8k_tok_s: 2882
+    verified: true
+    verified_date: 2026-09-24
+  - id: tp3
+    nodes: 3
+    cabling: QSFP triangle
+    command: ./run.sh tp3
+    max_model_len: 262144
+    decode_tok_s: {code: 56.5, prose: 39.3, source: bench/results/2026-09-24-tp3.md}
+    prefill_cold_8k_tok_s: 2669
+    verified: true
+    verified_date: 2026-09-24
+  - id: tp3-1m
+    nodes: 3
+    cabling: QSFP triangle
+    command: ./run.sh tp3-1m
+    max_model_len: 1000000
+    decode_tok_s: {code: 57.4, prose: 41.1, source: bench/results/2026-09-24-tp3.md}
+    prefill_tok_s_at_988k: 1894
+    needle_test: 3/3 at 128K, 256K, 512K, 900K, 988K
+    verified: true
+    verified_date: 2026-09-24

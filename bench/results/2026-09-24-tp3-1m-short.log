@@ -1,0 +1,10 @@
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=0 runs=3 max_tokens=512 no_think=False code=True
+run1: prompt=53 gen=512 ttft=0.67s prefill=79 tok/s decode=53.3 tok/s total=10.3s
+run2: prompt=53 gen=512 ttft=0.17s prefill=312 tok/s decode=57.4 tok/s total=9.1s
+run3: prompt=53 gen=512 ttft=0.18s prefill=296 tok/s decode=59.2 tok/s total=8.8s
+MEDIAN decode=57.4 tok/s  prefill=296 tok/s
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=0 runs=3 max_tokens=512 no_think=False code=False
+run1: prompt=29 gen=512 ttft=0.13s prefill=231 tok/s decode=44.2 tok/s total=11.7s
+run2: prompt=29 gen=512 ttft=0.17s prefill=176 tok/s decode=41.0 tok/s total=12.7s
+run3: prompt=29 gen=512 ttft=0.09s prefill=329 tok/s decode=41.1 tok/s total=12.5s
+MEDIAN decode=41.1 tok/s  prefill=231 tok/s

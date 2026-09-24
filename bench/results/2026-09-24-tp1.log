@@ -1,0 +1,40 @@
+=== bench tp1 2026-09-24T13:04:45-05:00 http://127.0.0.1:8000/v1
+model=qwen3.8-flash-next max_model_len=262144 host=spark1
+               total        used        free      shared  buff/cache   available
+Mem:             121         106           1           0          15          15
+--- short code, 3 runs
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=0 runs=3 max_tokens=512 no_think=False code=True
+run1: prompt=53 gen=512 ttft=1.52s prefill=35 tok/s decode=41.2 tok/s total=13.9s
+run2: prompt=53 gen=512 ttft=0.20s prefill=260 tok/s decode=37.9 tok/s total=13.7s
+run3: prompt=53 gen=512 ttft=0.30s prefill=179 tok/s decode=40.1 tok/s total=13.1s
+MEDIAN decode=40.1 tok/s  prefill=179 tok/s
+--- short prose, 3 runs
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=0 runs=3 max_tokens=512 no_think=False code=False
+run1: prompt=29 gen=512 ttft=0.21s prefill=139 tok/s decode=26.6 tok/s total=19.5s
+run2: prompt=29 gen=512 ttft=0.23s prefill=127 tok/s decode=26.4 tok/s total=19.6s
+run3: prompt=29 gen=512 ttft=0.16s prefill=181 tok/s decode=25.8 tok/s total=20.0s
+MEDIAN decode=26.4 tok/s  prefill=139 tok/s
+--- long ~12K prompt, 2 runs
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=12 runs=2 max_tokens=512 no_think=False code=False
+run1: prompt=9297 gen=76 ttft=7.09s prefill=1312 tok/s decode=28.9 tok/s total=9.7s
+run2: prompt=9297 gen=80 ttft=5.22s prefill=1780 tok/s decode=27.1 tok/s total=8.2s
+MEDIAN decode=28.0 tok/s  prefill=1546 tok/s
+--- cold prefill 8K x3
+cold prefill: qwen3.8-flash-next @ http://127.0.0.1:8000/v1  target ~8K tokens, 3 runs, unique prompt each time
+  run1: prompt=7367 ttft=4.31s prefill=1710 tok/s total=4.36s
+  run2: prompt=7380 ttft=4.15s prefill=1779 tok/s total=4.22s
+  run3: prompt=7404 ttft=4.15s prefill=1785 tok/s total=4.23s
+MEDIAN cold prefill = 1779 tok/s
+--- cold prefill 28K x2
+cold prefill: qwen3.8-flash-next @ http://127.0.0.1:8000/v1  target ~28K tokens, 2 runs, unique prompt each time
+  run1: prompt=25700 ttft=14.12s prefill=1821 tok/s total=14.17s
+  run2: prompt=25678 ttft=14.00s prefill=1834 tok/s total=14.06s
+MEDIAN cold prefill = 1827 tok/s
+--- smoke test
+PASS  arithmetic
+PASS  fact
+PASS  code
+PASS  thinking
+PASS  tool call
+model qwen3.8-flash-next: ALL PASS
+=== done 2026-09-24T13:21:33-05:00 -> bench/results/2026-09-24-tp1.log

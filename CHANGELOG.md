@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- `bench/bench.sh`: `LONG=1` now includes the 988K needle test on a 1M server, so the published 988K result
+  can be reproduced with the repo's own bench. A failed smoke test now makes the bench exit non-zero.
+  Corrected the long-prompt label (~9K tokens, not ~12K).
+- `kit/` updated to dgx-spark-recipe-kit v0.1.1 (same code as before, now a tagged release).
+
 ## 0.2.0 — 2026-09-24
 
 - `./setup.sh` (shared dgx-spark-recipe-kit under `kit/`): nodes and SSH, dependencies, cabling detection, fabric

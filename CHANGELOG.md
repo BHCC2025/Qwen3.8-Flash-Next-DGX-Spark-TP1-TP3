@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.2 — 2026-09-29
+
+- Quick start opens with a "Before you start" checklist (DGX OS, the cables, and that Hugging Face needs nothing).
+- `kit/` updated to dgx-spark-recipe-kit v0.4.0: `./setup.sh` test-downloads one small file of the model right after
+  the dependencies, so a network problem (or, for a gated model, a missing licence or login) shows up before
+  anything big happens.
+- Launch commands unchanged (checked with `DRY_RUN=1`).
+
 ## 0.3.1 — 2026-09-29
 
 - **TP3 and TP3-1M benched with this repo's launcher and `bench/bench.sh`** (`bench/results/2026-09-29-tp3.md`). The

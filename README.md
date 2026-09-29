@@ -35,6 +35,13 @@ See [bench/results/](bench/results/).
 
 ## Quick start
 
+Before you start:
+- DGX OS 7 on every Spark, with its current updates.
+- The QSFP cables connected: one cable between the two Sparks for TP2; three cables for TP3, each Spark to both
+  others. No IP addresses are needed on the cabled ports; `./setup.sh` assigns them
+  ([docs/networking.md](docs/networking.md)).
+- Nothing to set up on Hugging Face: the model downloads without a login, and `./setup.sh` tests that first.
+
 On the Spark you'll serve from (the head node):
 
 ```bash

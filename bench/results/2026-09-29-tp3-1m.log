@@ -1,0 +1,66 @@
+=== bench tp3-1m 2026-09-29T14:13:21-05:00 http://127.0.0.1:8000/v1
+model=qwen3.8-flash-next max_model_len=1000000 host=spark1
+               total        used        free      shared  buff/cache   available
+Mem:             121          95           0           0          26          25
+--- short code, 3 runs
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=0 runs=3 max_tokens=512 no_think=False code=True
+run1: prompt=53 gen=512 ttft=1.56s prefill=34 tok/s decode=58.8 tok/s total=10.3s
+run2: prompt=53 gen=512 ttft=0.31s prefill=169 tok/s decode=57.6 tok/s total=9.2s
+run3: prompt=53 gen=512 ttft=0.10s prefill=520 tok/s decode=55.3 tok/s total=9.4s
+MEDIAN decode=57.6 tok/s  prefill=169 tok/s
+--- short prose, 3 runs
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=0 runs=3 max_tokens=512 no_think=False code=False
+run1: prompt=29 gen=512 ttft=0.15s prefill=196 tok/s decode=39.6 tok/s total=13.1s
+run2: prompt=29 gen=512 ttft=0.11s prefill=275 tok/s decode=42.4 tok/s total=12.2s
+run3: prompt=29 gen=512 ttft=0.09s prefill=331 tok/s decode=38.9 tok/s total=13.3s
+MEDIAN decode=39.6 tok/s  prefill=275 tok/s
+--- long ~9K prompt, 2 runs
+model=qwen3.8-flash-next base=http://127.0.0.1:8000/v1 long_k=12 runs=2 max_tokens=512 no_think=False code=False
+run1: prompt=9297 gen=80 ttft=5.74s prefill=1619 tok/s decode=41.0 tok/s total=7.7s
+run2: prompt=9297 gen=81 ttft=3.64s prefill=2551 tok/s decode=36.8 tok/s total=5.8s
+MEDIAN decode=38.9 tok/s  prefill=2085 tok/s
+--- cold prefill 8K x3
+cold prefill: qwen3.8-flash-next @ http://127.0.0.1:8000/v1  target ~8K tokens, 3 runs, unique prompt each time
+  run1: prompt=7379 ttft=2.88s prefill=2561 tok/s total=2.97s
+  run2: prompt=7367 ttft=2.82s prefill=2611 tok/s total=2.92s
+  run3: prompt=7362 ttft=2.84s prefill=2591 tok/s total=2.94s
+MEDIAN cold prefill = 2591 tok/s
+--- cold prefill 28K x2
+cold prefill: qwen3.8-flash-next @ http://127.0.0.1:8000/v1  target ~28K tokens, 2 runs, unique prompt each time
+  run1: prompt=25679 ttft=10.10s prefill=2542 tok/s total=10.15s
+  run2: prompt=25630 ttft=10.04s prefill=2554 tok/s total=10.08s
+MEDIAN cold prefill = 2548 tok/s
+--- long-context needle test 128 256 512 900 988K
+ctx= 128,278 tok  ttft=   55.2s  prefill=   2324 tok/s  decode= 49.9 tok/s  needles=3/3  gen=39
+    vault-A @  25%  OK    expected citadel-onyx-2721
+    vault-B @  50%  OK    expected glacier-meadow-5812
+    vault-C @  75%  OK    expected sable-yarrow-8420
+    answer: vault-A: citadel-onyx-2721 | vault-B: glacier-meadow-5812 | vault-C: sable-yarrow-8420
+ctx= 256,580 tok  ttft=  116.4s  prefill=   2205 tok/s  decode= 69.7 tok/s  needles=3/3  gen=37
+    vault-A @  25%  OK    expected topaz-river-2722
+    vault-B @  50%  OK    expected quartz-thistle-3852
+    vault-C @  75%  OK    expected violet-lagoon-9585
+    answer: vault-A: topaz-river-2722 | vault-B: quartz-thistle-3852 | vault-C: violet-lagoon-9585
+ctx= 512,460 tok  ttft=  247.4s  prefill=   2071 tok/s  decode= 99.9 tok/s  needles=3/3  gen=36
+    vault-A @  25%  OK    expected violet-marble-9755
+    vault-B @  50%  OK    expected glacier-sierra-1193
+    vault-C @  75%  OK    expected timber-prairie-6092
+    answer: vault-A: violet-marble-9755 | vault-B: glacier-sierra-1193 | vault-C: timber-prairie-6092
+ctx= 899,097 tok  ttft=  467.4s  prefill=   1923 tok/s  decode=107.9 tok/s  needles=3/3  gen=37
+    vault-A @  25%  OK    expected lantern-tundra-5427
+    vault-B @  50%  OK    expected cobalt-umber-2676
+    vault-C @  75%  OK    expected marble-prairie-3106
+    answer: vault-A: lantern-tundra-5427 | vault-B: cobalt-umber-2676 | vault-C: marble-prairie-3106
+ctx= 988,114 tok  ttft=  525.1s  prefill=   1882 tok/s  decode=116.2 tok/s  needles=3/3  gen=37
+    vault-A @  25%  OK    expected ivory-zephyr-5088
+    vault-B @  50%  OK    expected sable-glacier-3593
+    vault-C @  75%  OK    expected quartz-umber-6149
+    answer: vault-A: ivory-zephyr-5088 | vault-B: sable-glacier-3593 | vault-C: quartz-umber-6149
+--- smoke test
+PASS  arithmetic
+PASS  fact
+PASS  code
+PASS  thinking
+PASS  tool call
+model qwen3.8-flash-next: ALL PASS
+=== done 2026-09-29T14:51:22-05:00 -> bench/results/2026-09-29-tp3-1m.log

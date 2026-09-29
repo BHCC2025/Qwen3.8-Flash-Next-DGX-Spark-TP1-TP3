@@ -5,7 +5,8 @@
 #
 # Settings are the upstream TP2 "speed" profile (tonyd2wild/Qwen3.8-Flash-Next-NVFP4-DGX-Spark, see NOTICE):
 # PLE table resident (half per rank), decode CUDA graphs without torch.compile, MTP3, 6 seqs, 4096 chunk, FP8 KV,
-# gmu 0.70, 262K. The network is NCCL over RoCE on the one cabled CX7 port of each node (cluster.env TP2_*).
+# gmu 0.70, 262K. The network is NCCL over RoCE on the one cabled CX7 port of each node (cluster.env TP2_*),
+# with the kit's pair profile (kit/lib/nccl.sh), not upstream's NCCL settings.
 set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 RANK="${1:?rank 0 or 1}"
@@ -43,4 +44,4 @@ run_container run --gpus all -d --name "$NAME" --restart no \
     "${SPEC[@]}" "${ASYNC_ARGS[@]}" "${GRAPH_ARGS[@]}" "${KV_ARGS[@]}" \
     --distributed-executor-backend mp --nnodes 2 --node-rank "$RANK" \
     --master-addr "$TP2_HEAD_IP" --master-port "$MPORT" "${HEADLESS[@]}" ${EXTRA:-}
-echo "launched $NAME rank=$RANK host=$HOST_IP tp=2 ple=$PLE_MODE graphs=$GRAPHS kv=$KV_DTYPE mtp=$MTP gmu=$GMU maxlen=$MAXLEN"
+[ "${DRY_RUN:-0}" = 1 ] || echo "launched $NAME rank=$RANK host=$HOST_IP tp=2 ple=$PLE_MODE graphs=$GRAPHS kv=$KV_DTYPE mtp=$MTP gmu=$GMU maxlen=$MAXLEN"

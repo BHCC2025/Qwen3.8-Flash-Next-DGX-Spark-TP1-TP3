@@ -10,8 +10,8 @@ dimensions don't divide by 3:
 | Routed + shared expert intermediate | 640 | 768 | zero rows in gate/up, zero columns in down | silu(0)·0 = 0 and zero down-columns add nothing; 768/3 = 256 per rank (2 FP8 blocks, 16 NVFP4 groups) |
 | Vocab-parallel embeddings / LM head | 248,320 | 248,448 | pad to a multiple of 64 × TP | the extra rows are zero and vLLM trims logits back to the real vocab |
 
-Everything else (the indexer, hyper-connections, the n-gram table, embeddings) is either already replicated or
-already divisible. The MTP head's `fc_embedding`/`fc_hidden` (output width 2,560) is made replicated.
+Everything else (the indexer, hyper-connections, the n-gram table) is either already replicated or already
+divisible. The MTP head's `fc_embedding`/`fc_hidden` (output width 2,560) is made replicated.
 
 ## Pieces
 
@@ -29,7 +29,10 @@ tripped a re-encode path in a similar TP3 port; 0 × 1 = 0 either way.
 
 ## Running the tests
 
+From the repo root, on a node that has the model:
+
 ```bash
+source cluster.env
 docker run --rm --gpus all -v "$MODEL_DIR:/models/qwen38fn:ro" -v "$PWD/patches/tp3-pad:/work" \
   --entrypoint python3 vllm/vllm-openai:nightly-8a728663c1c3eeace834a95f5654fa653cc1998c /work/test_tp_pad.py
 ```
@@ -39,5 +42,5 @@ Expected: every line `PASS`, ending in `ALL PASS`.
 ## Cost
 
 Replicating KV heads triples the full-attention layers' KV cache per token (GatedDeltaNet layers keep a fixed-size
-state instead). That still leaves a large
-pool: about 2.47M tokens at `GMU=0.70` on three Sparks. Everything else is unchanged or zero padding.
+state instead). That still leaves a large pool: about 2.38M tokens at `GMU=0.70` on three Sparks
+(2.46M on the 1M server; vLLM's startup log, 2026-09-29). Everything else is unchanged or zero padding.

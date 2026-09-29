@@ -15,8 +15,9 @@ Dims of the checkpoint that do not divide by 3, and what happens to each:
   routed experts  moe_intermediate 640     -> 768  zero rows/cols (NVFP4 main, FP8-block MTP):
   shared expert   shared_expert_int 640    -> 768  silu(0)*0 = 0, zero down cols: exact.
                                                    768/3 = 256 per rank, 2 FP8 blocks of 128.
-Replicated or vocab-parallel already (no change): indexer, hyperconnections, PLE, embeddings,
-lm_head. MTP fc_embedding/fc_hidden (2560 out, not /3) are made replicated in mtp.py.
+Replicated already (no change): indexer, hyperconnections, PLE. Embeddings and lm_head are
+vocab-parallel; their vocab is padded to a multiple of 64 x TP below (the extra rows are zero).
+MTP fc_embedding/fc_hidden (2560 out, not /3) are made replicated in mtp.py.
 The padded block scales of the FP8 MTP experts are 1.0, not 0 (a 0/denormal scale on an
 all-zero block tripped the DeepSeek-V4.1 TP3 re-encode; 0 x 1 = 0 either way).
 """

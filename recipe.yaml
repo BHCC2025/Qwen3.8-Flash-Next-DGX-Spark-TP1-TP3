@@ -46,17 +46,17 @@ recipes:
     cabling: QSFP triangle
     command: ./run.sh tp3
     max_model_len: 262144
-    decode_tok_s: {code: 56.5, prose: 39.3, source: bench/results/2026-09-24-tp3.md}
-    prefill_cold_8k_tok_s: 2669
+    decode_tok_s: {code: 62.8, prose: 40.7, source: bench/results/2026-09-29-tp3.md}
+    prefill_cold_8k_tok_s: 2688
     verified: true
-    verified_date: 2026-09-24
+    verified_date: 2026-09-29
   - id: tp3-1m
     nodes: 3
     cabling: QSFP triangle
     command: ./run.sh tp3-1m
     max_model_len: 1000000
-    decode_tok_s: {code: 57.4, prose: 41.1, source: bench/results/2026-09-24-tp3.md}
-    prefill_tok_s_at_988k: 1894
+    decode_tok_s: {code: 57.6, prose: 39.6, source: bench/results/2026-09-29-tp3.md}
+    prefill_tok_s_at_988k: 1882
     needle_test: 3/3 at 128K, 256K, 512K, 900K, 988K
     verified: true
-    verified_date: 2026-09-24
+    verified_date: 2026-09-29

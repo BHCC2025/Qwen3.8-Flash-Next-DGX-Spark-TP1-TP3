@@ -7,7 +7,8 @@ This repository redistributes, with the modifications noted in each PROVENANCE.m
    6ad1c8f15cbab1ababd2048e8e5f94094dbfc4a0 (single-spark-vllm-tp1/patch/),
    Copyright 2026 Tony DeAngelo (Tech2Wild / 2Wild), Apache-2.0.
    recipes/tp1.sh and recipes/tp2.sh are derived from that repository's launch/qwen38fn-nvidia-tp1.sh and
-   launch/qwen38fn-nvidia-tp2.sh (settings unchanged; paths, network and naming moved to cluster.env).
+   launch/qwen38fn-nvidia-tp2.sh (vLLM settings unchanged; paths and naming in cluster.env; the NCCL settings
+   come from kit/lib/nccl.sh).
    One line of patches/ple-offload/upstream-overlays/modelopt.py was changed here (see PROVENANCE.md there).
 
 2. Files from vLLM (https://github.com/vllm-project/vllm), Copyright contributors to the vLLM project, Apache-2.0,
@@ -19,5 +20,11 @@ This repository redistributes, with the modifications noted in each PROVENANCE.m
 The NCCL settings used for the three-node RoCE triangle (recipes/tp3.sh) follow the configuration published in
 MiaAI-Lab/DeepSeek-v4.1-Flash-DGX-Sparks. No code from that repository is included.
 
+3. kit/ — dgx-spark-recipe-kit (BHCC2025, Apache-2.0), vendored at a tagged release via git subtree. It includes
+   the shared benchmark and smoke test that bench/bench.sh and scripts/smoke-test.sh run.
+
 Original to this repository: patches/tp3-pad/tp_pad.py, patches/tp3-pad/test_tp_pad.py, the hooks in
-patches/tp3-pad/{model,mtp}.py, recipes/tp3.sh, run.sh, lib/, scripts/, bench/, docs/.
+patches/tp3-pad/{model,mtp}.py, recipes/tp3.sh, run.sh, lib/, scripts/prep-tp3-modeldir.sh, bench/results/, docs/.
+
+This repository contains no model weights. ./setup.sh downloads nvidia/Qwen3.8-Flash-Next-NVFP4 from Hugging Face,
+under the model's own licence. Container image: vllm/vllm-openai (vLLM project, Apache-2.0), used unmodified.

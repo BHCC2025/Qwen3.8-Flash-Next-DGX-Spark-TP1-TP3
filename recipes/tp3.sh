@@ -66,4 +66,4 @@ run_container run --gpus all -d --name "$NAME" --restart no \
     "${SPEC[@]}" "${ASYNC_ARGS[@]}" "${GRAPH_ARGS[@]}" "${KV_ARGS[@]}" \
     --distributed-executor-backend mp --nnodes 3 --node-rank "$RANK" \
     --master-addr "$HEAD_IP" --master-port "$MPORT" "${HEADLESS[@]}" ${EXTRA:-}
-echo "launched $NAME rank=$RANK host=$HOST_IP tp=3 longctx=$LONGCTX ple=$PLE_MODE graphs=$GRAPHS kv=$KV_DTYPE mtp=$MTP gmu=$GMU maxlen=$MAXLEN"
+[ "${DRY_RUN:-0}" = 1 ] || echo "launched $NAME rank=$RANK host=$HOST_IP tp=3 longctx=$LONGCTX ple=$PLE_MODE graphs=$GRAPHS kv=$KV_DTYPE mtp=$MTP gmu=$GMU maxlen=$MAXLEN"

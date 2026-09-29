@@ -48,5 +48,5 @@ case "$cmd" in
   logs)
     docker logs -f --tail 100 "$NAME" ;;
   *)
-    sed -n '2,15p' "$0"; exit 2 ;;
+    sed -n '2,13p' "$0"; exit 2 ;;
 esac

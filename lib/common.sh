@@ -26,7 +26,7 @@ NV=$VP/models/qwen4_exp/nvidia
 # Variables forwarded from the head to the workers so every rank runs the same config.
 FORWARD_VARS=(IMAGE NAME PLE_MODE PLE_WORKERS GRAPHS CAPTURE_SIZES KV_DTYPE OVERLAYS GMU MAXLEN SEQS MTP PORT MPORT CHUNK
               TOOL_PARSER DRAFT_VOCAB PREFIX_CACHE_ARG IB_GID_INDEX IB_GID_INDEX_TP2 NCCL_DEBUG NCCL_CHANNELS MTP_INDEX_SHARE ASYNC_SCHED
-              LONGCTX EXTRA DOCKER_EXTRA)
+              LONGCTX EXTRA DOCKER_EXTRA MODEL_DIR MODEL_DIR_TP3 MODEL_DIR_TP3_1M CACHE_DIR)
 forward_env() {
   local v out=""
   for v in "${FORWARD_VARS[@]}"; do [ -n "${!v+x}" ] && out+="$v=$(printf %q "${!v}") "; done

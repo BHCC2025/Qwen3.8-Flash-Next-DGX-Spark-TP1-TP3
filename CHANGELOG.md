@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.1 — 2026-09-29
+
+- **TP3 and TP3-1M benched with this repo's launcher and `bench/bench.sh`** (`bench/results/2026-09-29-tp3.md`). The
+  earlier TP3 figures came from the pre-repo launcher and had no smoke-test log, although the README said every
+  row was benched and passed it. Now every row is. TP3: 62.8 / 40.7 tok/s code / prose; TP3-1M needle test 3/3 up to
+  988K. KV pool sizes are quoted from vLLM's log (2.38M tokens for TP3, 2.46M for TP3-1M).
+- `kit/` updated to dgx-spark-recipe-kit v0.3.0: `./setup.sh --check` checks every node in `cluster.env` (it only
+  checked the head), the RDMA test works for a second user, and the benchmark refuses to file another model's
+  results here.
+- Environment overrides of `MODEL_DIR`, `MODEL_DIR_TP3`, `MODEL_DIR_TP3_1M` and `CACHE_DIR` now reach the workers.
+- `DRY_RUN=1` prints only the docker commands; `./run.sh` usage no longer prints code.
+- Docs corrected: disk ~130 GB (what `./setup.sh` checks), `GRAPHS=full` listed, NOTICE lists the kit and says the
+  TP2 NCCL settings come from it, padding doc no longer contradicts itself on embeddings, provenance tables carry
+  sha256, the unused `*_e5m2.py` overlays are named as unused; GitHub issue template.
+- Launch commands unchanged (checked with `DRY_RUN=1` against 0.3.0 for tp1, tp2, tp3 and tp3-1m).
+
 ## 0.3.0 — 2026-09-29
 
 - `kit/` updated to dgx-spark-recipe-kit v0.2.1:
@@ -13,11 +29,9 @@
   be silently ignored.
 - `DRY_RUN=1` prints the docker commands before the model is downloaded (it stopped at MODEL MISSING).
 - `./run.sh status` checks the head locally instead of over SSH to itself.
-- README: the long-prompt test is ~9K tokens, not ~12K.
-- `bench/bench.sh`: `LONG=1` now includes the 988K needle test on a 1M server, so the published 988K result
-  can be reproduced with the repo's own bench. A failed smoke test now makes the bench exit non-zero.
-  Corrected the long-prompt label (~9K tokens, not ~12K).
-- `kit/` updated to dgx-spark-recipe-kit v0.1.1 (same code as before, now a tagged release).
+- The shared bench: `LONG=1` includes the 988K needle test on a 1M server, so the published 988K result can be
+  reproduced; a failed smoke test makes the bench exit non-zero; the long-prompt test is labelled ~9K tokens (not
+  ~12K) here and in the README. (Also in this release: kit v0.1.1, the same code as before as a tagged release.)
 
 ## 0.2.0 — 2026-09-24
 

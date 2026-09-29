@@ -33,4 +33,4 @@ run_container run --gpus all -d --name "$NAME" --restart no \
   "$IMAGE" \
     /models/qwen38fn "${NAME_ARGS[@]}" "${SERVE_ARGS[@]}" --tensor-parallel-size 1 \
     "${SPEC[@]}" "${ASYNC_ARGS[@]}" "${GRAPH_ARGS[@]}" "${KV_ARGS[@]}" ${EXTRA:-}
-echo "launched $NAME tp=1 ple=$PLE_MODE graphs=$GRAPHS kv=$KV_DTYPE mtp=$MTP draft_vocab=$DRAFT_VOCAB gmu=$GMU maxlen=$MAXLEN seqs=$SEQS"
+[ "${DRY_RUN:-0}" = 1 ] || echo "launched $NAME tp=1 ple=$PLE_MODE graphs=$GRAPHS kv=$KV_DTYPE mtp=$MTP draft_vocab=$DRAFT_VOCAB gmu=$GMU maxlen=$MAXLEN seqs=$SEQS"

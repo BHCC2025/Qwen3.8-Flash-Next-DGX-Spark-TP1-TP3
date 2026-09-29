@@ -11,8 +11,8 @@ padding is exact (the tests prove it), and the result runs at up to 1M context.
 |---|---|---|---|---|---|
 | 1 | `./run.sh tp1` | 256K | 40.1 / 26.4 tok/s | 1,779 tok/s | 2026-09-24 |
 | 2 | `./run.sh tp2` | 256K | 52.9 / 37.7 tok/s | 2,855 tok/s | 2026-09-29 |
-| 3 | `./run.sh tp3` | 256K | **56.5 / 39.3 tok/s** | 2,669 tok/s | 2026-09-24 |
-| 3 | `./run.sh tp3-1m` | **1M** | 57.4 / 41.1 tok/s | ~1,900 tok/s at 988K | 2026-09-24, needle test 3/3 up to 988K |
+| 3 | `./run.sh tp3` | 256K | **62.8 / 40.7 tok/s** | 2,688 tok/s | 2026-09-29 |
+| 3 | `./run.sh tp3-1m` | **1M** | 57.6 / 39.6 tok/s | 1,882 tok/s at 988K | 2026-09-29, needle test 3/3 up to 988K |
 
 Every row was benched on our own Sparks with `bench/bench.sh` (same prompts for every row) and passed the smoke test.
 See [bench/results/](bench/results/).
@@ -25,10 +25,10 @@ See [bench/results/](bench/results/).
 
 | | |
 |---|---|
-| Hardware | 1–3 DGX Spark (or other GB10 boxes with a ConnectX-7) |
+| Hardware | 1–3 DGX Sparks (or other GB10 boxes with a ConnectX-7) |
 | Cables | TP2: one QSFP cable. TP3: three, in a triangle (see [docs/networking.md](docs/networking.md)) |
 | OS | DGX OS 7 (Ubuntu 24.04), Docker with the NVIDIA runtime |
-| Disk | ~124 GB free NVMe on **every** node (each node needs its own local copy of the model) |
+| Disk | ~130 GB free NVMe on **every** node (each node needs its own local copy of the model) |
 | Image | `vllm/vllm-openai:nightly-8a728663c1c3eeace834a95f5654fa653cc1998c` (pinned; the patches are made for it) |
 | Model | `nvidia/Qwen3.8-Flash-Next-NVFP4` @ `fc694b54` |
 | Access | SSH from the head node to the workers (`setup.sh` sets up key login); `sudo` for installs and fabric IPs |
@@ -81,7 +81,7 @@ overridden the same way (`PORT=8001 ./run.sh tp1`). `DRY_RUN=1` prints the docke
 | `GMU` | 0.80 | 0.70 | 0.70 | vLLM `--gpu-memory-utilization` |
 | `CHUNK` | 4096 | 4096 | 4096 | `--max-num-batched-tokens` (the biggest speed lever on GB10) |
 | `KV_DTYPE` | fp8_e4m3 | fp8_e4m3 | fp8_e4m3 | `auto` = BF16 |
-| `GRAPHS` | nocompile | nocompile | nocompile | CUDA-graph mode: `nocompile`, `piecewise`, `eager`, `default` |
+| `GRAPHS` | nocompile | nocompile | nocompile | CUDA-graph mode: `nocompile`, `piecewise`, `full` (TP1/TP2), `eager`, `default` |
 | `TOOL_PARSER` | qwen3_xml | qwen3_xml | qwen3_xml | or `qwen3_coder` |
 | `EXTRA` / `DOCKER_EXTRA` | | | | extra args for vLLM / `docker run` |
 
@@ -103,7 +103,7 @@ The recipe headers in [recipes/](recipes/) list the rest.
 `bench/bench.sh LABEL` runs the kit's shared suite (`kit/bench/`, the same for every recipe) against whatever is
 serving on `:8000`:
 - single-stream decode for code, prose and a ~9K-token prompt
-- cold prefill at 8K and 28K tokens with unique prompts (prefix cache off)
+- cold prefill at 8K and 28K tokens (unique prompts, so no prefix-cache hits)
 - the smoke test; add `LONG=1` for the needle test
 
 Results and raw logs go in [bench/results/](bench/results/).

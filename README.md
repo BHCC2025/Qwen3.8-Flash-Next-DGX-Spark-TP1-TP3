@@ -10,7 +10,7 @@ padding is exact (the tests prove it), and the result runs at up to 1M context.
 | Sparks | Command | Context | Decode, single stream (code / prose) | Cold prefill 8K | Verified |
 |---|---|---|---|---|---|
 | 1 | `./run.sh tp1` | 256K | 40.1 / 26.4 tok/s | 1,779 tok/s | 2026-09-24 |
-| 2 | `./run.sh tp2` | 256K | 51.7 / 37.6 tok/s | 2,882 tok/s | 2026-09-24 |
+| 2 | `./run.sh tp2` | 256K | 52.9 / 37.7 tok/s | 2,855 tok/s | 2026-09-29 |
 | 3 | `./run.sh tp3` | 256K | **56.5 / 39.3 tok/s** | 2,669 tok/s | 2026-09-24 |
 | 3 | `./run.sh tp3-1m` | **1M** | 57.4 / 41.1 tok/s | ~1,900 tok/s at 988K | 2026-09-24, needle test 3/3 up to 988K |
 
@@ -68,8 +68,8 @@ Stop with `./run.sh stop`, which stops the container on every node listed in `cl
 
 ## Settings
 
-Set any of these in the environment for one run (`MTP=4 SEQS=8 ./run.sh tp2`). `DRY_RUN=1` prints the docker
-commands and starts nothing.
+Set any of these in the environment for one run (`MTP=4 SEQS=8 ./run.sh tp2`); `cluster.env` values can be
+overridden the same way (`PORT=8001 ./run.sh tp1`). `DRY_RUN=1` prints the docker commands and starts nothing.
 
 | Variable | TP1 | TP2 | TP3 | What it does |
 |---|---|---|---|---|
@@ -100,8 +100,9 @@ The recipe headers in [recipes/](recipes/) list the rest.
 
 ## Benchmarks
 
-`bench/bench.sh LABEL` runs the same suite against whatever is serving on `:8000`:
-- single-stream decode for code, prose and a ~12K-token prompt
+`bench/bench.sh LABEL` runs the kit's shared suite (`kit/bench/`, the same for every recipe) against whatever is
+serving on `:8000`:
+- single-stream decode for code, prose and a ~9K-token prompt
 - cold prefill at 8K and 28K tokens with unique prompts (prefix cache off)
 - the smoke test; add `LONG=1` for the needle test
 

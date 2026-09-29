@@ -37,10 +37,10 @@ recipes:
     cabling: one QSFP cable
     command: ./run.sh tp2
     max_model_len: 262144
-    decode_tok_s: {code: 51.7, prose: 37.6, source: bench/results/2026-09-24-tp1-tp2.md}
-    prefill_cold_8k_tok_s: 2882
+    decode_tok_s: {code: 52.9, prose: 37.7, source: bench/results/2026-09-29-tp2.md}
+    prefill_cold_8k_tok_s: 2855
     verified: true
-    verified_date: 2026-09-24
+    verified_date: 2026-09-29
   - id: tp3
     nodes: 3
     cabling: QSFP triangle

@@ -1,7 +1,19 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — 2026-09-29
 
+- `kit/` updated to dgx-spark-recipe-kit v0.2.1:
+  - TP2 uses the faster pair NCCL profile (the triangle's buffer and protocol settings). Re-benched: decode after a
+    ~9K-token prompt 33.4 → 39.0 tok/s, the rest unchanged within noise (`bench/results/2026-09-29-tp2.md`).
+    TP1 and TP3 launch with identical docker commands, so their numbers stand.
+  - `bench/bench.sh` and `scripts/smoke-test.sh` now run the kit's shared suite (same test code as before), so every
+    recipe is measured the same way.
+  - `./setup.sh --check` works on a fresh multi-node clone (it used to fail or stop in the network test).
+- `cluster.env` values can be overridden from the environment for one run (`PORT=8001 ./run.sh tp1`); they used to
+  be silently ignored.
+- `DRY_RUN=1` prints the docker commands before the model is downloaded (it stopped at MODEL MISSING).
+- `./run.sh status` checks the head locally instead of over SSH to itself.
+- README: the long-prompt test is ~9K tokens, not ~12K.
 - `bench/bench.sh`: `LONG=1` now includes the 988K needle test on a 1M server, so the published 988K result
   can be reproduced with the repo's own bench. A failed smoke test now makes the bench exit non-zero.
   Corrected the long-prompt label (~9K tokens, not ~12K).

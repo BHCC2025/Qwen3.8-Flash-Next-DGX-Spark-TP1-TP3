@@ -39,11 +39,11 @@ esac
 HOST_IP="${LAN_IPS[$RANK]}"; HEAD_IP="${LAN_IPS[0]}"
 
 check_model "$MODEL"
-grep -q '"num_key_value_heads": 6' "$MODEL/config.json" \
+[ ! -f "$MODEL/config.json" ] || grep -q '"num_key_value_heads": 6' "$MODEL/config.json" \
   || { echo "$MODEL/config.json is not the TP3-padded one — run scripts/prep-tp3-modeldir.sh on $(hostname)" >&2; exit 3; }
 LONG_ENV=()
 if [ "$LONGCTX" = 1 ]; then
-  grep -q '"rope_type": "yarn"' "$MODEL/config.json" \
+  [ ! -f "$MODEL/config.json" ] || grep -q '"rope_type": "yarn"' "$MODEL/config.json" \
     || { echo "$MODEL/config.json has no YaRN — run scripts/prep-tp3-modeldir.sh --longctx" >&2; exit 3; }
   LONG_ENV=(-e VLLM_ALLOW_LONG_MAX_MODEL_LEN=1)
 fi

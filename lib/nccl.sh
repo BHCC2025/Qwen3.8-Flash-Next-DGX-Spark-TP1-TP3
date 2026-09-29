@@ -3,6 +3,9 @@
 # IB_GID_INDEX, LAN_IF). Each function fills the bash array NCCL_ENV with docker `-e` arguments.
 
 # pair: two Sparks, one QSFP cable. Bootstrap and data both on the cabled port.
+# Buffers/protocol as in the triangle profile: without them a 1 MB all-reduce took ~490 us (slower than 4 MB);
+# with them ~138 us, 4 MB bus bandwidth 9.3 -> 11.4 GB/s, small messages unchanged (measured 2026-09-26).
+# NCCL_PROTO=^LL128 alone was erratic — keep the set together.
 #   nccl_env_pair RANK        (0 = head, 1 = worker)
 nccl_env_pair() {
   local fab_if hca
@@ -13,8 +16,9 @@ nccl_env_pair() {
             -e NCCL_IB_ROCE_VERSION_NUM=2 -e NCCL_IB_ADDR_FAMILY=AF_INET -e NCCL_IB_ADDR_RANGE="$TP2_SUBNET"
             -e NCCL_SOCKET_IFNAME="$fab_if" -e GLOO_SOCKET_IFNAME="$fab_if" -e TP_SOCKET_IFNAME="$fab_if" -e MN_IF_NAME="$fab_if"
             -e NCCL_NVLS_ENABLE=0 -e NCCL_CROSS_NIC=0 -e NCCL_IB_MERGE_NICS=0 -e NCCL_CUMEM_ENABLE=0
-            -e NCCL_IGNORE_CPU_AFFINITY=1 -e NCCL_DEBUG="${NCCL_DEBUG:-WARN}" -e TORCH_NCCL_ASYNC_ERROR_HANDLING=1
-            ${NCCL_CHANNELS:+-e NCCL_MAX_NCHANNELS=$NCCL_CHANNELS -e NCCL_MIN_NCHANNELS=$NCCL_CHANNELS})
+            -e NCCL_BUFFSIZE=1048576 -e NCCL_LL128_BUFFSIZE=262144 -e NCCL_PROTO=^LL128
+            -e NCCL_MAX_NCHANNELS=${NCCL_CHANNELS:-8} ${NCCL_CHANNELS:+-e NCCL_MIN_NCHANNELS=$NCCL_CHANNELS}
+            -e NCCL_IGNORE_CPU_AFFINITY=1 -e NCCL_DEBUG="${NCCL_DEBUG:-WARN}" -e TORCH_NCCL_ASYNC_ERROR_HANDLING=1)
   NCCL_MASTER=$TP2_HEAD_IP
 }
 

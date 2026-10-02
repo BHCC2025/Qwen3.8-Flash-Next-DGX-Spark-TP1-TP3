@@ -1,5 +1,10 @@
 # Qwen3.8-Flash-Next on 1, 2 or 3 DGX Sparks (TP1–TP3)
 
+> **Archived (2026-10-02).** This vLLM recipe is no longer maintained. For Qwen3.8 Flash Next on DGX Spark we now use
+> [TensorFold](https://github.com/ashhart/TensorFold) by @ashhart; see
+> [NVIDIA-DGX-Spark-LLM-Setup](https://github.com/BHCC2025/NVIDIA-DGX-Spark-LLM-Setup) for where to start. The recipe
+> below still works as published (vLLM, pinned versions), and its benchmark logs stay in `bench/results/`.
+
 Run NVIDIA's `nvidia/Qwen3.8-Flash-Next-NVFP4` checkpoint with vLLM on one, two or three NVIDIA DGX Sparks
 (GB10, 128 GB unified memory each). One script, `./run.sh tp1|tp2|tp3`, and one config file describing your nodes.
 
